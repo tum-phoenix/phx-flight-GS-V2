@@ -54,8 +54,8 @@ void loop() {
       computeRPM();
       timer = micros();
       }
-    manipulateSpeed();
-    //manipulateSpeed_Sinus();
+    //manipulateSpeed();
+    manipulateSpeed_Sinus();
     //getrpm();
 
     //Set speed for the ESC
@@ -112,7 +112,7 @@ void manipulateSpeed(){
 
 void manipulateSpeed_Sinus(){
     //Serial.println(sin((int(motorAngle)+angle_offset)));
-    moduelate_pwmValue = pwmValue+int(modulation_offset*sin((int(motorAngle)+angle_offset)));
+    moduelate_pwmValue = pwmValue+int(modulation_offset*sin(((int(motorAngle)+angle_offset))/180 * PI));
   }
 
 void manipulateSpeed_Sinus_V2(){
