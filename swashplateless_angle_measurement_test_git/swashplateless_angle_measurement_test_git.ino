@@ -29,7 +29,7 @@ unsigned long timer_2 = 0;
 int angle_offset = 0;
 int modulation_offset = 0;
 int main_loop_duration;
-
+double controlAngle;
 PulsePositionInput myIn;
 float ppmValues[8];
 float throttle, pitch, roll, yaw;
@@ -86,7 +86,7 @@ void printInfo(){
     Serial.print(rpm);
     Serial.print(" ");
     Serial.print("x: ");
-    Serial.print(pwmValue);
+    Serial.print(controlAngle);
     Serial.print(" ");
     Serial.print(angle_offset);
     Serial.print(" ");
@@ -128,13 +128,14 @@ void getTPRY(){
 void computeControl(){
   int minpwmValue = 145;
   if (pwmValue > minpwmValue){
-    modulation_offset = (pwmValue-minpwmValue) * sqrt(pow(normalizePRY(pitch),2) +pow(normalizePRY(roll),2) );
+    modulation_offset = (pwmValue-minpwmValue) * sqrt(pow(normalizePRY(pitch),2) + pow(normalizePRY(roll),2) );
   }
-  double controlAngle = atan2(normalizePRY(pitch), normalizePRY(roll));  
+  controlAngle = atan2(normalizePRY(pitch), normalizePRY(roll));  
+  
   if (controlAngle > 0 ){
     angle_offset = 180*float(controlAngle)/PI;
   }else{
-    angle_offset = 180*float(360 + controlAngle)/PI;
+    angle_offset = 360 + 180*float( controlAngle)/PI;
     }
   pwmValue = 128 + 128 * normalizeThrottle(throttle);
   }
